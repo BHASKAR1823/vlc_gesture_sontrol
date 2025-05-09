@@ -17,40 +17,36 @@ try:
 except ImportError:
     gpu_main = None
 
+
 def main():
     """Main entry point for the CLI"""
     parser = argparse.ArgumentParser(
         description="Control VLC media player using hand gestures detected through your webcam."
     )
-    
+
     parser.add_argument(
-        "--version", 
-        action="version", 
-        version=f"VLC Gesture Control {version('vlc-gesture-control')}"
+        "--version",
+        action="version",
+        version=f"VLC Gesture Control {version('vlc-gesture-control')}",
     )
-    
+
     parser.add_argument(
-        "--mode", 
-        choices=["cpu", "gpu"], 
+        "--mode",
+        choices=["cpu", "gpu"],
         default="cpu",
-        help="Processing mode: CPU (default) or GPU if supported"
+        help="Processing mode: CPU (default) or GPU if supported",
     )
-    
+
     parser.add_argument(
-        "--camera", 
-        type=int, 
-        default=0,
-        help="Camera index to use (default: 0)"
+        "--camera", type=int, default=0, help="Camera index to use (default: 0)"
     )
-    
+
     parser.add_argument(
-        "--debug", 
-        action="store_true",
-        help="Enable debug mode with additional logging"
+        "--debug", action="store_true", help="Enable debug mode with additional logging"
     )
-    
+
     args = parser.parse_args()
-    
+
     try:
         if args.mode == "cpu":
             if cpu_main is None:
@@ -62,7 +58,9 @@ def main():
             gpu_main(camera_index=args.camera, debug=args.debug)
     except ImportError as e:
         if args.mode == "gpu":
-            print("Error: GPU dependencies not installed. Install with 'pip install vlc-gesture-control[gpu]'")
+            print(
+                "Error: GPU dependencies not installed. Install with 'pip install vlc-gesture-control[gpu]'"
+            )
         else:
             print(f"Error importing required modules: {e}")
         sys.exit(1)
@@ -73,8 +71,10 @@ def main():
         print(f"Error: {e}")
         if args.debug:
             import traceback
+
             traceback.print_exc()
         sys.exit(1)
 
+
 if __name__ == "__main__":
-    main() 
+    main()

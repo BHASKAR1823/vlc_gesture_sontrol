@@ -18,7 +18,7 @@ def mock_hand_landmarks():
     """Return mock hand landmarks for testing."""
     # Create mock hand landmarks
     mock_landmarks = MagicMock()
-    
+
     # Set up finger positions for all fingers up
     landmarks = []
     for i in range(21):  # MediaPipe uses 21 landmarks for a hand
@@ -28,17 +28,17 @@ def mock_hand_landmarks():
             lm.y = 0.3
         else:
             lm.y = 0.5
-            
+
         # Set x coordinates based on position
         lm.x = 0.5
         lm.z = 0.0
-            
+
         landmarks.append(lm)
-        
+
     # Set appropriate position for thumb
     landmarks[4].x = 0.3  # Thumb tip
     landmarks[3].x = 0.4  # Thumb IP
-        
+
     mock_landmarks.landmark = landmarks
     return mock_landmarks
 
@@ -46,15 +46,17 @@ def mock_hand_landmarks():
 @pytest.fixture
 def mock_vlc_window():
     """Return a mock VLC window handle and environment."""
-    with patch('win32gui.FindWindow', return_value=12345), \
-         patch('win32gui.IsWindow', return_value=True):
+    with (
+        patch("win32gui.FindWindow", return_value=12345),
+        patch("win32gui.IsWindow", return_value=True),
+    ):
         yield 12345
 
 
 @pytest.fixture
 def mock_video_capture():
     """Return a mock video capture object."""
-    with patch('cv2.VideoCapture') as mock_capture:
+    with patch("cv2.VideoCapture") as mock_capture:
         mock_cap = MagicMock()
         mock_cap.isOpened.return_value = True
         mock_cap.read.return_value = (True, np.zeros((480, 640, 3), dtype=np.uint8))
@@ -65,7 +67,7 @@ def mock_video_capture():
 @pytest.fixture
 def mock_mediapipe_hands():
     """Return a mock MediaPipe hands object."""
-    with patch('mediapipe.solutions.hands.Hands') as mock_hands:
+    with patch("mediapipe.solutions.hands.Hands") as mock_hands:
         mock_hands_instance = MagicMock()
         mock_hands.return_value = mock_hands_instance
-        yield mock_hands_instance 
+        yield mock_hands_instance

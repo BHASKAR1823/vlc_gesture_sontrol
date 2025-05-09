@@ -48,9 +48,8 @@ dev = [
 ]
 
 [project.urls]
-"Homepage" = "https://github.com/yourusername/vlc-gesture-control"
-"Bug Tracker" = "https://github.com/yourusername/vlc-gesture-control/issues"
-"Documentation" = "https://github.com/yourusername/vlc-gesture-control#readme"
+"Homepage" = "https://github.com/BHASKAR1823/vlc_gesture_sontrol"
+
 
 [project.scripts]
 vlc-gesture-control = "vlc_gesture_control.cli:main"
