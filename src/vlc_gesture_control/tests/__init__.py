@@ -1,3 +1,1 @@
-"""
-Tests for VLC Gesture Control
-"""
+"""Tests for VLC Gesture Control."""

@@ -1,6 +1,4 @@
-"""
-VLC Gesture Control - Control VLC media player using hand gestures
-"""
+"""VLC Gesture Control - Control VLC media player using hand gestures."""
 
 try:
     from importlib.metadata import version
