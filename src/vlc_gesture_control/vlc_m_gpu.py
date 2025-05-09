@@ -24,7 +24,8 @@ def get_device_choice():
         if choice in ["cpu", "gpu"]:
             return choice
         print(
-            f"Invalid device choice in environment variable: {choice}. Falling back to CPU."
+            f"Invalid device choice in environment variable: {choice}. Falling back to"
+            " CPU."
         )
         return "cpu"
 
@@ -492,7 +493,8 @@ class GestureController:
                 for title in all_windows:
                     print(f"- {title}")
                 print(
-                    "VLC media player not found. Will continue and wait for VLC to open."
+                    "VLC media player not found. Will continue and wait for VLC to"
+                    " open."
                 )
 
             # Failed camera read counter
@@ -542,7 +544,6 @@ class GestureController:
                         print(f"GPU processing error, falling back to CPU: {e}")
                         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 else:
-
                     rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
                 # Process with MediaPipe

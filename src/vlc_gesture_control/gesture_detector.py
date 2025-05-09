@@ -215,8 +215,8 @@ class GestureDetector(BaseGestureDetector):
             if hand_label == "Left":
                 return "NEXT_VIDEO"  # Left hand thumb only (pointing right) = NEXT
             elif hand_label == "Right":
-                return (
-                    "PREVIOUS_VIDEO"  # Right hand thumb only (pointing left) = PREVIOUS
+                return (  # Right hand thumb only (pointing left) = PREVIOUS
+                    "PREVIOUS_VIDEO"
                 )
 
         # Check for all five fingers up = PLAY/PAUSE

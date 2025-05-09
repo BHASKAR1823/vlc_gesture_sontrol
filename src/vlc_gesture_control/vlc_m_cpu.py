@@ -83,7 +83,6 @@ class GestureController:
 
         # different logic for left and right hand
         if hand_label == "Right":
-
             if (
                 landmarks[self.mp_hands.HandLandmark.THUMB_TIP].x
                 < landmarks[self.mp_hands.HandLandmark.THUMB_IP].x
@@ -92,7 +91,6 @@ class GestureController:
             else:
                 finger_state.append(0)
         else:
-
             if (
                 landmarks[self.mp_hands.HandLandmark.THUMB_TIP].x
                 > landmarks[self.mp_hands.HandLandmark.THUMB_IP].x
@@ -420,7 +418,6 @@ class GestureController:
 
                 if results.multi_hand_landmarks:
                     for idx, hand_landmarks in enumerate(results.multi_hand_landmarks):
-
                         hand_label = None
                         if results.multi_handedness:
                             hand_label = (

@@ -21,7 +21,9 @@ except ImportError:
 def main():
     """Main entry point for the CLI"""
     parser = argparse.ArgumentParser(
-        description="Control VLC media player using hand gestures detected through your webcam."
+        description=(
+            "Control VLC media player using hand gestures detected through your webcam."
+        )
     )
 
     parser.add_argument(
@@ -59,7 +61,8 @@ def main():
     except ImportError as e:
         if args.mode == "gpu":
             print(
-                "Error: GPU dependencies not installed. Install with 'pip install vlc-gesture-control[gpu]'"
+                "Error: GPU dependencies not installed. Install with 'pip install"
+                " vlc-gesture-control[gpu]'"
             )
         else:
             print(f"Error importing required modules: {e}")

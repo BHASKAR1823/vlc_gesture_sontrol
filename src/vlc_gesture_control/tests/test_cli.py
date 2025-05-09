@@ -74,7 +74,8 @@ class TestCLI(unittest.TestCase):
 
         # Verify the error message was printed
         mock_print.assert_any_call(
-            "Error: GPU dependencies not installed. Install with 'pip install vlc-gesture-control[gpu]'"
+            "Error: GPU dependencies not installed. Install with 'pip install"
+            " vlc-gesture-control[gpu]'"
         )
 
     @patch("vlc_gesture_control.cli.version")
