@@ -9,5 +9,6 @@ try:
 except ImportError:
     __version__ = "1.0"  # Fallback version
 
+
 __author__ = "VLC Gesture Control Contributors"
 __license__ = "MIT"
