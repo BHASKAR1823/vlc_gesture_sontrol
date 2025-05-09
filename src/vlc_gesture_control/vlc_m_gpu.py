@@ -8,13 +8,34 @@ import win32api
 import win32con
 import torch
 import numpy as np
+import os
 
 def get_device_choice():
-    while True:
-        choice = input("Choose processing device (cpu/gpu): ").lower().strip()
+    # Check if we're in a testing environment or automated environment
+    if 'PYTEST_CURRENT_TEST' in os.environ or 'CI' in os.environ:
+        # Default to CPU in test environments
+        print("Test environment detected. Using CPU by default.")
+        return 'cpu'
+    
+    # Check if device choice is provided through environment variable
+    if 'VLC_GESTURE_DEVICE' in os.environ:
+        choice = os.environ['VLC_GESTURE_DEVICE'].lower().strip()
         if choice in ['cpu', 'gpu']:
             return choice
-        print("Invalid choice. Please enter 'cpu' or 'gpu'")
+        print(f"Invalid device choice in environment variable: {choice}. Falling back to CPU.")
+        return 'cpu'
+    
+    # Interactive mode - prompt user
+    while True:
+        try:
+            choice = input("Choose processing device (cpu/gpu): ").lower().strip()
+            if choice in ['cpu', 'gpu']:
+                return choice
+            print("Invalid choice. Please enter 'cpu' or 'gpu'")
+        except EOFError:
+            # Handle cases where input() is not available
+            print("Cannot get interactive input. Defaulting to CPU.")
+            return 'cpu'
 
 # Chnage device based on user choice
 device_choice = get_device_choice()
@@ -51,7 +72,7 @@ def find_vlc_window():
     return None
 
 class GestureController:
-    def __init__(self):
+    def __init__(self, camera_index=0):
         self.mp_hands = mp.solutions.hands
         self.hands = None
         self.mp_draw = mp.solutions.drawing_utils
@@ -70,6 +91,7 @@ class GestureController:
         self.fps_display_interval = 2.0  
         self.current_gesture = None
         self.gesture_repeat_count = 0
+        self.camera_index = camera_index
         
         # Hand movement tracking for swipe gestures
         self.hand_positions = []
@@ -84,9 +106,13 @@ class GestureController:
 
     def initialize_camera(self):
         """Initialize the webcam for capturing video frames."""
-        self.cap = cv2.VideoCapture(0)
-        if not self.cap.isOpened():
-            raise RuntimeError("Camera not available.")
+        try:
+            self.cap = cv2.VideoCapture(self.camera_index)
+            if not self.cap.isOpened():
+                raise RuntimeError(f"Camera at index {self.camera_index} not available.")
+        except Exception as e:
+            print(f"Error initializing camera: {e}")
+            raise
 
     def fingers_up(self, hand_landmarks, hand_label):
         """Determine which fingers are up based on landmark positions and hand label."""
@@ -555,7 +581,7 @@ if __name__ == "__main__":
 
 def main(camera_index=0, debug=False):
     """Entry point for the GPU version of VLC Gesture Control."""
-    controller = GestureController()
+    controller = GestureController(camera_index=camera_index)
     controller.run()
 
 if __name__ == "__main__":

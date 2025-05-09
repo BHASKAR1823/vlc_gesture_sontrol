@@ -29,7 +29,7 @@ def find_vlc_window():
     return None
 
 class GestureController:
-    def __init__(self):
+    def __init__(self, camera_index=0):
         self.mp_hands = mp.solutions.hands
         self.hands = None
         self.mp_draw = mp.solutions.drawing_utils
@@ -48,15 +48,20 @@ class GestureController:
         self.fps_display_interval = 2.0 
         self.current_gesture = None
         self.gesture_repeat_count = 0
+        self.camera_index = camera_index
         
         # vlc_window will be initialized in run()
         self.vlc_window = None
 
     def initialize_camera(self):
         """Initialize the webcam for capturing video frames."""
-        self.cap = cv2.VideoCapture(0)
-        if not self.cap.isOpened():
-            raise RuntimeError("Camera not available.")
+        try:
+            self.cap = cv2.VideoCapture(self.camera_index)
+            if not self.cap.isOpened():
+                raise RuntimeError(f"Camera at index {self.camera_index} not available.")
+        except Exception as e:
+            print(f"Error initializing camera: {e}")
+            raise
 
     def fingers_up(self, hand_landmarks, hand_label):
         """Determine which fingers are up based on landmark positions and hand label."""
@@ -399,12 +404,9 @@ class GestureController:
             self.hands.close()
         print("Cleanup completed successfully.")
 
-if __name__ == "__main__":
-    GestureController().run()
-
 def main(camera_index=0, debug=False):
     """Entry point for the CPU version of VLC Gesture Control."""
-    controller = GestureController()
+    controller = GestureController(camera_index=camera_index)
     controller.run()
 
 if __name__ == "__main__":

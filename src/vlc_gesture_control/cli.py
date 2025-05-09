@@ -6,6 +6,17 @@ import argparse
 import sys
 from importlib.metadata import version
 
+# Import these at module level for easier mocking in tests
+try:
+    from .vlc_m_cpu import main as cpu_main
+except ImportError:
+    cpu_main = None
+
+try:
+    from .vlc_m_gpu import main as gpu_main
+except ImportError:
+    gpu_main = None
+
 def main():
     """Main entry point for the CLI"""
     parser = argparse.ArgumentParser(
@@ -42,10 +53,12 @@ def main():
     
     try:
         if args.mode == "cpu":
-            from .vlc_m_cpu import main as cpu_main
+            if cpu_main is None:
+                raise ImportError("CPU module not available")
             cpu_main(camera_index=args.camera, debug=args.debug)
         else:
-            from .vlc_m_gpu import main as gpu_main
+            if gpu_main is None:
+                raise ImportError("GPU dependencies not installed")
             gpu_main(camera_index=args.camera, debug=args.debug)
     except ImportError as e:
         if args.mode == "gpu":

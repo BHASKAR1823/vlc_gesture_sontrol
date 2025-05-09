@@ -30,8 +30,13 @@ class TestMediaController(unittest.TestCase):
             
     def test_is_player_running_when_window_not_exists(self):
         """Test is_player_running returns False when window doesn't exist"""
-        with patch('vlc_gesture_control.media_controller.win32gui.IsWindow', return_value=False):
-            with patch('vlc_gesture_control.media_controller.win32gui.FindWindow', return_value=None):
+        # Clear player_window to ensure is_player_running has to call FindWindow
+        self.controller.player_window = None
+        
+        # Create a mock for find_player_window that returns False
+        with patch.object(self.controller, 'find_player_window', return_value=False):
+            # When both IsWindow and FindWindow fail, is_player_running should return False
+            with patch('vlc_gesture_control.media_controller.win32gui.IsWindow', return_value=False):
                 self.assertFalse(self.controller.is_player_running())
                 
     @patch('vlc_gesture_control.media_controller.win32api.PostMessage')

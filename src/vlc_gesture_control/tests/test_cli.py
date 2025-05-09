@@ -61,22 +61,20 @@ class TestCLI(unittest.TestCase):
         mock_args.mode = "gpu"
         mock_args.debug = False
         mock_parse_args.return_value = mock_args
+
+        # Create a side effect that raises ImportError when importing gpu_main
+        with patch('vlc_gesture_control.cli.gpu_main', None):
+            with patch('builtins.print') as mock_print:
+                # Need to properly mock locale.normalize to return a proper string, not a MagicMock
+                with patch('locale.normalize', return_value="en_US.UTF-8"):
+                    main()
+                
+        # Check that sys.exit was called with code 1 (error)
+        mock_exit.assert_called_once_with(1)
         
-        # Create a side effect that raises ImportError
-        def side_effect(*args, **kwargs):
-            from_list = args[0] if args else kwargs.get('fromlist', None)
-            if from_list and 'gpu_main' in from_list:
-                raise ImportError("GPU dependencies not installed")
-            return MagicMock()
-            
-        with patch('builtins.__import__', side_effect=side_effect):
-            # Call function
-            with patch('sys.stdout'):  # Suppress stdout for cleaner test output
-                main()
-            
-            # Assertions
-            mock_exit.assert_called_once_with(1)
-            
+        # Verify the error message was printed
+        mock_print.assert_any_call("Error: GPU dependencies not installed. Install with 'pip install vlc-gesture-control[gpu]'")
+        
     @patch('vlc_gesture_control.cli.version')
     @patch('argparse.ArgumentParser.parse_args')
     @patch('sys.exit')

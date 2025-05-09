@@ -48,20 +48,21 @@ class MediaController:
                     self.player_window = hwnd
                     return True
                     
-            # Only print available windows in debug mode or when explicitly requested
-            # print(f"Available windows:")
-            # for _, title in all_windows:
-            #    print(f"- {title}")
+            # Window was not found
+            self.player_window = None
             return False
         except Exception as e:
             print(f"Error finding player window: {e}")
+            self.player_window = None
             return False
     
     def is_player_running(self):
         """Check if the media player is running."""
         try:
             if not self.player_window or not win32gui.IsWindow(self.player_window):
-                return self.find_player_window()
+                # If we don't have a valid window handle, try to find one
+                # Only return True if find_player_window actually finds a window
+                return self.find_player_window() and self.player_window is not None
             return True
         except Exception as e:
             print(f"Error checking if player is running: {e}")
