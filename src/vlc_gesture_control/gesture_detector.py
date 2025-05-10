@@ -110,9 +110,7 @@ class GestureDetector(BaseGestureDetector):
 
         # Hand motion tracking for swipe gestures
         self.prev_hand_center: Optional[Tuple[float, float, float]] = None
-        self.hand_positions: List[Tuple[float, float, float]] = (
-            []
-        )  # Store recent hand positions
+        self.hand_positions = []  # Store recent hand positions
         self.max_positions = 10  # Number of positions to track
         self.swipe_threshold = 0.15  # Minimum x-distance to detect a swipe
         self.swipe_frames_threshold = 5  # Number of frames to complete a swipe
@@ -215,8 +213,8 @@ class GestureDetector(BaseGestureDetector):
             if hand_label == "Left":
                 return "NEXT_VIDEO"  # Left hand thumb only (pointing right) = NEXT
             elif hand_label == "Right":
-                return (  # Right hand thumb only (pointing left) = PREVIOUS
-                    "PREVIOUS_VIDEO"
+                return (
+                    "PREVIOUS_VIDEO"  # Right hand thumb only (pointing left) = PREVIOUS
                 )
 
         # Check for all five fingers up = PLAY/PAUSE
