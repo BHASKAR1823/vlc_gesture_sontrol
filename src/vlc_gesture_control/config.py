@@ -54,9 +54,7 @@ SWIPE_SETTINGS = {
 
 # Fast-forward/rewind settings
 FAST_CONTROL = {
-    "required_repeat_count": (
-        4  # Number of consecutive detections needed for fast forward/rewind
-    )
+    "required_repeat_count": 4  # Number of consecutive detections needed for fast forward/rewind
 }
 
 # VLC window settings

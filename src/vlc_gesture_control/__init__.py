@@ -5,7 +5,7 @@ try:
 
     __version__ = version("vlc-gesture-control")
 except ImportError:
-    __version__ = "1.0"  # Fallback version
+    __version__ = "1.0.0"  # Fallback version
 
 
 __author__ = "VLC Gesture Control Contributors"
