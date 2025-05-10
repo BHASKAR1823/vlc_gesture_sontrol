@@ -4,10 +4,11 @@ This module handles the detection and classification of hand gestures.
 """
 
 from abc import ABC, abstractmethod
-from typing import List, Optional, Tuple, Union, Any
+from typing import Any, List, Optional, Tuple, Union
 
 import mediapipe as mp
 import numpy as np
+
 from .config import GESTURES, SPECIAL_GESTURES
 
 

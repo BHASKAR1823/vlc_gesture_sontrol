@@ -4,9 +4,11 @@ This module handles the control of VLC media player through keyboard commands.
 """
 
 import time
-import win32gui
+
 import win32api
 import win32con
+import win32gui
+
 from .config import SUPPORTED_PLAYERS
 
 

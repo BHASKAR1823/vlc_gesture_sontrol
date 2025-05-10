@@ -4,7 +4,7 @@ Tests for the CLI module
 
 import sys
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 from vlc_gesture_control.cli import main
 

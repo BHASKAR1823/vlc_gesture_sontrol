@@ -3,7 +3,7 @@ Tests for the controller classes (CPU and GPU versions)
 """
 
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
 import cv2
 import mediapipe as mp

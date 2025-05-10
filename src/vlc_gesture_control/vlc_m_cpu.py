@@ -7,13 +7,14 @@
 # thumb-only gestures for next/previous video navigation
 # crashes when no vlc is fixed.
 
+import time
+
 import cv2
 import mediapipe as mp
-import time
 import pyautogui
-import win32gui
 import win32api
 import win32con
+import win32gui
 
 
 def enum_windows_callback(hwnd, results):

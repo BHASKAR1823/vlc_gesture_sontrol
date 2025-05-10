@@ -2,9 +2,10 @@
 Shared test fixtures for VLC Gesture Control tests
 """
 
-import pytest
 from unittest.mock import MagicMock, patch
+
 import numpy as np
+import pytest
 
 
 @pytest.fixture

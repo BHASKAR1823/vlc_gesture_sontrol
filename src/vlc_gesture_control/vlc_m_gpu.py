@@ -1,14 +1,15 @@
-import tensorflow as tf
+import os
+import time
+
 import cv2
 import mediapipe as mp
-import time
+import numpy as np
 import pyautogui
-import win32gui
+import tensorflow as tf
+import torch
 import win32api
 import win32con
-import torch
-import numpy as np
-import os
+import win32gui
 
 
 def get_device_choice():
