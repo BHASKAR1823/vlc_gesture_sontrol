@@ -1,0 +1,47 @@
+name: CI Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: windows-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install black==25.1.0 isort==5.13.2 pytest pytest-cov flake8
+        pip install pyautogui==0.9.54 pywin32==306 numpy==1.24.4 opencv-python==4.8.1.78 mediapipe==0.10.9
+        pip install -e .
+      shell: bash
+        
+    - name: Run black --check
+      run: |
+        black --check src
+      shell: bash
+        
+    - name: Run isort check
+      run: |
+        isort --check-only --profile black src
+      shell: bash
+        
+    - name: Run flake8
+      run: |
+        flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
+      shell: bash
+        
+    - name: Run tests
+      run: |
+        pytest src/vlc_gesture_control/tests
+      shell: bash 
