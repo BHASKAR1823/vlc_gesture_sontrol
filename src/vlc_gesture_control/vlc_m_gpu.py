@@ -1,3 +1,52 @@
+"""
+VLC Gesture Control GPU Module.
+
+This module contains the GPU-accelerated implementation of the VLC Gesture Controller.
+It will gracefully handle the case when tensorflow is not available.
+"""
+
+# Standard imports that should always be available
+import os
+import sys
+import time
+import logging
+from typing import Dict, List, Optional, Tuple, Union
+
+# Setup basic logging
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+)
+logger = logging.getLogger(__name__)
+
+# Try to import tensorflow, but continue if not available
+try:
+    import tensorflow as tf
+
+    TENSORFLOW_AVAILABLE = True
+    logger.info(f"TensorFlow {tf.__version__} loaded successfully")
+except ImportError:
+    TENSORFLOW_AVAILABLE = False
+    logger.warning("TensorFlow is not available, GPU controller will be limited")
+
+# Import internal modules
+from vlc_gesture_control.gesture_detector import GestureDetector
+from vlc_gesture_control.media_controller import MediaController
+
+# Define placeholder if tensorflow isn't available
+if not TENSORFLOW_AVAILABLE:
+
+    class PlaceholderModel:
+        """A placeholder model for when TensorFlow is not available."""
+
+        def __init__(self):
+            """Initialize an empty model."""
+            logger.warning("Using placeholder model instead of TensorFlow model")
+
+        def predict(self, *args, **kwargs):
+            """Return a dummy prediction."""
+            return [[0.9, 0.1, 0.0]]
+
+
 import os
 import time
 
@@ -5,7 +54,6 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import pyautogui
-import tensorflow as tf
 import torch
 import win32api
 import win32con
@@ -81,7 +129,31 @@ def find_vlc_window():
 
 
 class GestureController:
+    """
+    GestureController class for the VLC Gesture Control project.
+    GPU-accelerated version for better performance on supported hardware.
+    """
+
     def __init__(self, camera_index=0):
+        """Initialize the GestureController."""
+        self.media_controller = MediaController()
+        self.gesture_detector = GestureDetector()
+
+        # Load the TensorFlow model if available
+        if TENSORFLOW_AVAILABLE:
+            self.model_path = os.path.join(
+                os.path.dirname(__file__), "models", "palm_model"
+            )
+            try:
+                self.model = tf.keras.models.load_model(self.model_path)
+                logger.info("TensorFlow model loaded successfully")
+            except Exception as e:
+                logger.error(f"Error loading TensorFlow model: {e}")
+                self.model = PlaceholderModel()
+        else:
+            # Use placeholder model if TensorFlow is not available
+            self.model = PlaceholderModel()
+
         self.mp_hands = mp.solutions.hands
         self.hands = None
         self.mp_draw = mp.solutions.drawing_utils
